@@ -450,10 +450,10 @@ export default function HomePage() {
 
       {/* ── Floating Spotify player ───────────────────────────────── */}
       {playing && (
-        <div className="fixed bottom-28 right-4 z-40 shadow-xl rounded-xl overflow-hidden">
+        <div className="fixed bottom-28 left-4 right-4 sm:left-auto sm:right-4 sm:w-[300px] z-40 shadow-xl rounded-xl overflow-hidden">
           <iframe
             src={SPOTIFY_EMBED}
-            width="300"
+            width="100%"
             height="80"
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             loading="lazy"

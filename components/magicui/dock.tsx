@@ -6,7 +6,7 @@ import React, { PropsWithChildren, useRef } from "react";
 
 const MAGNIFICATION = 60;
 const DISTANCE = 100;
-const BASE_SIZE = 44;
+const BASE_SIZE = 40;
 
 export interface DockProps {
   className?: string;
@@ -42,7 +42,7 @@ export function Dock({
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
         className={cn(
-          "flex h-16 items-end gap-3 rounded-2xl border border-gray-200 bg-white/90 px-4 pb-3 shadow-xl backdrop-blur-md",
+          "flex h-14 sm:h-16 items-end gap-2 sm:gap-3 rounded-2xl border border-gray-200 bg-white/90 px-3 sm:px-4 pb-2 sm:pb-3 shadow-xl backdrop-blur-md",
           className
         )}
       >

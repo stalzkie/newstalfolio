@@ -469,34 +469,36 @@ export default function AdminPage() {
     <main className="min-h-screen bg-gray-50 pb-24">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-white border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          {/* Top row: back link + sign out */}
+          <div className="flex items-center justify-between h-11 sm:h-14">
             <Link href="/" className="flex items-center gap-1 text-xs font-semibold text-gray-500 hover:text-gray-900 lowercase transition-colors">
               <ChevronLeft size={14} />
               portfolio
             </Link>
-            <span className="text-gray-200">|</span>
-            <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
-              {(["admin", "tasks", "money"] as Section[]).map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSection(s)}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold lowercase transition-colors whitespace-nowrap ${section === s ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-800"}`}
-                >
-                  {s === "tasks" ? "task management" : s === "money" ? "money" : "admin"}
-                </button>
-              ))}
+            <div className="flex items-center gap-3">
+              <span className="text-[11px] text-gray-400 lowercase hidden sm:block">{user.email}</span>
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-900 lowercase transition-colors"
+              >
+                <LogOut size={13} />
+                sign out
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[11px] text-gray-400 lowercase hidden sm:block">{user.email}</span>
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-900 lowercase transition-colors"
-            >
-              <LogOut size={13} />
-              sign out
-            </button>
+          {/* Section switcher — scrollable on mobile */}
+          <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1 mb-2 w-full overflow-x-auto">
+            {(["admin", "tasks", "money"] as Section[]).map((s) => (
+              <button
+                key={s}
+                onClick={() => setSection(s)}
+                className={`flex-1 min-w-0 px-3 py-1.5 rounded-lg text-xs font-semibold lowercase transition-colors whitespace-nowrap ${section === s ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-800"}`}
+              >
+                <span className="sm:hidden">{s === "tasks" ? "tasks" : s === "money" ? "money" : "admin"}</span>
+                <span className="hidden sm:inline">{s === "tasks" ? "task management" : s === "money" ? "money" : "admin"}</span>
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -523,7 +525,7 @@ export default function AdminPage() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 bg-white border border-gray-100 rounded-2xl p-1.5 w-fit overflow-x-auto">
+        <div className="flex gap-1 mb-6 bg-white border border-gray-100 rounded-2xl p-1.5 w-full overflow-x-auto">
           {(["profile", "experience", "work", "projects", "links"] as Tab[]).map((t) => (
             <TabBtn key={t} active={activeTab === t} onClick={() => setActiveTab(t)}>
               {t === "work" ? "certifications" : t}

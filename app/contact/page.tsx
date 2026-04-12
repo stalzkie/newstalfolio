@@ -31,16 +31,16 @@ export default function ContactPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
             {TRUST_STATS.map((s) => (
               <div
                 key={s.label}
-                className="flex flex-col gap-1 p-4 rounded-2xl bg-gray-50 border border-gray-100"
+                className="flex flex-col gap-1 p-3 sm:p-4 rounded-2xl bg-gray-50 border border-gray-100"
               >
-                <span className="text-2xl font-black text-gray-900 lowercase">
+                <span className="text-xl sm:text-2xl font-black text-gray-900 lowercase">
                   {s.value}
                 </span>
-                <span className="text-xs text-gray-400 lowercase leading-snug">
+                <span className="text-[10px] sm:text-xs text-gray-400 lowercase leading-snug">
                   {s.label}
                 </span>
               </div>

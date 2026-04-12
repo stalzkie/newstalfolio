@@ -493,7 +493,7 @@ export function ContentBundleAnim() {
         </div>
 
         {/* hub-and-spoke — fixed 240×108 box so SVG and HTML share one coordinate space */}
-        <div className="relative mx-auto" style={{ width: 240, height: 108 }}>
+        <div className="relative mx-auto overflow-hidden" style={{ width: "min(240px, 100%)", height: 108 }}>
 
           {/* SVG lines — drawn BEFORE icons so they sit behind */}
           <svg

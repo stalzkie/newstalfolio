@@ -154,7 +154,7 @@ export function FeaturePageLayout({
             {tag}
           </span>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 lowercase leading-[1.05] tracking-tight">
+          <h1 className="text-[2rem] sm:text-5xl lg:text-7xl font-black text-gray-900 lowercase leading-[1.1] tracking-tight">
             {headline}
           </h1>
 

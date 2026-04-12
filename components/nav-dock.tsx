@@ -32,7 +32,7 @@ export function NavDock() {
                   : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-800"
               }`}
             >
-              <Icon size={20} />
+              <Icon size={18} />
             </DockIcon>
           );
         })}
