@@ -274,17 +274,29 @@ export default function AdminPage() {
   const [editingLinkId, setEditingLinkId] = useState<string | null>(null);
   const [editLinkDraft, setEditLinkDraft] = useState({ label: "", abbr: "", url: "", imageUrl: "" });
 
-  /* ── Load data when authenticated ── */
+  /* ── Sync profile form whenever Supabase data arrives ── */
+  // profileData starts as DEFAULT_DATA and updates once Supabase responds.
+  // Watching profileData (not user) ensures the form fills with real values.
+  useEffect(() => {
+    setProfile({
+      name:            profileData.name,
+      title:           profileData.title,
+      specialisation:  profileData.specialisation,
+      about:           profileData.about,
+      location:        profileData.location,
+      website:         profileData.website,
+      email:           profileData.email,
+      portfolioHandle: profileData.portfolioHandle,
+      avatarUrl:       profileData.avatarUrl,
+      bannerUrl:       profileData.bannerUrl,
+      resumeUrl:       profileData.resumeUrl ?? "",
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profileData]);
+
+  /* ── Load other data once authenticated ── */
   useEffect(() => {
     if (!user) return;
-    setProfile({
-      name: profileData.name, title: profileData.title,
-      specialisation: profileData.specialisation, about: profileData.about,
-      location: profileData.location, website: profileData.website,
-      email: profileData.email, portfolioHandle: profileData.portfolioHandle,
-      avatarUrl: profileData.avatarUrl, bannerUrl: profileData.bannerUrl,
-      resumeUrl: profileData.resumeUrl ?? "",
-    });
     Promise.all([svc.getExperience(), svc.getRecentWork(), svc.getProjects(), svc.getLinks()])
       .then(([exp, work, proj, lnk]) => {
         setExperience(exp);
@@ -541,7 +553,7 @@ export default function AdminPage() {
         {activeTab === "profile" && (
           <div className="bg-white border border-gray-100 rounded-2xl p-6 flex flex-col gap-4">
             <h2 className="text-sm font-bold text-gray-900 lowercase">profile information</h2>
-            <p className="text-xs text-gray-400 lowercase -mt-2">stored in your browser (localStorage)</p>
+            <p className="text-xs text-gray-400 lowercase -mt-2">stored in supabase · visible to all visitors</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="name" value={profile.name} onChange={(v) => setProfile((p) => ({ ...p, name: v }))} placeholder="Stalingrad S. Dollosa" />
               <Field label="portfolio handle" value={profile.portfolioHandle} onChange={(v) => setProfile((p) => ({ ...p, portfolioHandle: v }))} placeholder="@stal" />
