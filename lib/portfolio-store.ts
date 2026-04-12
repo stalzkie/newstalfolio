@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { supabase } from "./supabase";
+
+/* ─── Types ──────────────────────────────────────────────────────── */
 
 export interface WorkExperience {
   id: string;
@@ -24,10 +27,10 @@ export interface Project {
   slug: string;
   title: string;
   description: string;
-  content?: string;         // markdown body for blog page
+  content?: string;
   tags: string[];
   imageUrl?: string;
-  coverImageUrl?: string;  // full-width hero on blog page
+  coverImageUrl?: string;
   category?: string;
   link?: string;
   publishedAt?: string | null;
@@ -53,16 +56,19 @@ export interface PortfolioData {
   avatarUrl: string;
   bannerUrl: string;
   resumeUrl: string;
+  // kept for fallback rendering only — real data is fetched separately via svc.*
   experience: WorkExperience[];
   recentWork: RecentWork[];
   projects: Project[];
 }
 
-const DEFAULT_DATA: PortfolioData = {
+/* ─── Defaults ───────────────────────────────────────────────────── */
+
+export const DEFAULT_DATA: PortfolioData = {
   name: "Stalingrad S. Dollosa",
   title: "agentic project manager · content strategist · business intelligence",
   specialisation: "I specialise in agentic project management, SEO strategy, and business intelligence.",
-  about: "Your bio goes here. I'm a versatile professional who bridges the gap between AI-driven project delivery, organic content growth, and data-informed decision making. I enjoy working on ambitious products and helping teams move faster with better insights.",
+  about: "Your bio goes here. I'm a versatile professional who bridges the gap between AI-driven project delivery, organic content growth, and data-informed decision making.",
   location: "Your City, Country",
   website: "stalfolio.com",
   email: "dstalingrad@gmail.com",
@@ -70,65 +76,72 @@ const DEFAULT_DATA: PortfolioData = {
   avatarUrl: "",
   bannerUrl: "",
   resumeUrl: "",
-  experience: [
-    {
-      id: "exp-1",
-      company: "Company Name",
-      role: "Your Role Title",
-      startDate: "Jan 2022",
-      endDate: "Present",
-      logoText: "CO",
-      logoColor: "#1a1a1a",
-    },
-  ],
-  recentWork: [
-    { id: "rw-1", title: "recent work 1", imageUrl: "", link: "" },
-    { id: "rw-2", title: "recent work 2", imageUrl: "", link: "" },
-    { id: "rw-3", title: "recent work 3", imageUrl: "", link: "" },
-    { id: "rw-4", title: "recent work 4", imageUrl: "", link: "" },
-  ],
-  projects: [
-    {
-      id: "proj-1",
-      slug: "project-title",
-      title: "project title",
-      description: "Brief description of this project and what it achieved for the team or client.",
-      content: "",
-      tags: ["tag1", "tag2"],
-      imageUrl: "",
-      coverImageUrl: "",
-      category: "",
-      link: "",
-      publishedAt: null,
-    },
-  ],
+  experience: [],
+  recentWork: [],
+  projects: [],
 };
 
-const STORAGE_KEY = "stalfolio-data";
+/* ─── Supabase row → PortfolioData ───────────────────────────────── */
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rowToProfile(row: any): Partial<PortfolioData> {
+  return {
+    name:             row.name             ?? "",
+    title:            row.title            ?? "",
+    specialisation:   row.specialisation   ?? "",
+    about:            row.about            ?? "",
+    location:         row.location         ?? "",
+    website:          row.website          ?? "",
+    email:            row.email            ?? "",
+    portfolioHandle:  row.portfolio_handle ?? "",
+    avatarUrl:        row.avatar_url       ?? "",
+    bannerUrl:        row.banner_url       ?? "",
+    resumeUrl:        row.resume_url       ?? "",
+  };
+}
+
+/* ─── Hook ───────────────────────────────────────────────────────── */
 
 export function usePortfolioData() {
   const [data, setData] = useState<PortfolioData>(DEFAULT_DATA);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setData({ ...DEFAULT_DATA, ...JSON.parse(stored) });
+    async function load() {
+      try {
+        const { data: row } = await supabase
+          .from("profile")
+          .select("*")
+          .eq("id", 1)
+          .single();
+        if (row) setData((d) => ({ ...d, ...rowToProfile(row) }));
+      } catch {
+        // network error — fall back to DEFAULT_DATA already in state
+      } finally {
+        setLoaded(true);
       }
-    } catch {
-      // ignore
     }
-    setLoaded(true);
+    load();
   }, []);
 
-  const save = (newData: PortfolioData) => {
+  const save = async (newData: PortfolioData): Promise<void> => {
     setData(newData);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
-    } catch {
-      // ignore
-    }
+    const { error } = await supabase.from("profile").upsert({
+      id:               1,
+      name:             newData.name,
+      title:            newData.title,
+      specialisation:   newData.specialisation,
+      about:            newData.about,
+      location:         newData.location,
+      website:          newData.website,
+      email:            newData.email,
+      portfolio_handle: newData.portfolioHandle,
+      avatar_url:       newData.avatarUrl,
+      banner_url:       newData.bannerUrl,
+      resume_url:       newData.resumeUrl,
+      updated_at:       new Date().toISOString(),
+    });
+    if (error) throw error;
   };
 
   return { data, save, loaded };

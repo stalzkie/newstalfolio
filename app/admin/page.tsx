@@ -303,10 +303,14 @@ export default function AdminPage() {
 
   const handleSignOut = () => supabase.auth.signOut();
 
-  /* ── Profile save (localStorage) ── */
-  const handleSaveProfile = () => {
-    saveProfile({ ...profileData, ...profile });
-    showToast("profile saved");
+  /* ── Profile save (Supabase) ── */
+  const handleSaveProfile = async () => {
+    try {
+      await saveProfile({ ...profileData, ...profile });
+      showToast("profile saved");
+    } catch (e: unknown) {
+      setDbError(e instanceof Error ? e.message : "failed to save profile");
+    }
   };
 
   /* ── Experience ── */
