@@ -20,9 +20,11 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       // Supabase storage + any https image (for uploaded/external images)
       `img-src 'self' data: https:`,
-      // Supabase API calls
-      `connect-src 'self'${SUPABASE_HOST ? ` https://${SUPABASE_HOST}` : ""}`,
+      // Supabase API calls + Spotify embed API
+      `connect-src 'self'${SUPABASE_HOST ? ` https://${SUPABASE_HOST}` : ""} https://*.spotify.com https://*.scdn.co`,
       "font-src 'self' data:",
+      // Allow Spotify embed iframe
+      "frame-src https://open.spotify.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self' https://formsubmit.co",
