@@ -12,6 +12,8 @@ const TRUST_STATS = [
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   return (
     <main className="min-h-screen bg-white pb-32">
@@ -63,18 +65,30 @@ export default function ContactPage() {
           ) : (
             <div className="rounded-2xl bg-gray-50 border border-gray-100">
               <form
-                action="https://formsubmit.co/dstalingrad@gmail.com"
-                method="POST"
-                onSubmit={() => setSubmitted(true)}
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setLoading(true);
+                  setError("");
+                  const fd = new FormData(e.currentTarget);
+                  const res = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      name: fd.get("name"),
+                      email: fd.get("email"),
+                      subject: fd.get("subject"),
+                      message: fd.get("message"),
+                    }),
+                  });
+                  if (res.ok) {
+                    setSubmitted(true);
+                  } else {
+                    setError("something went wrong. please try again.");
+                  }
+                  setLoading(false);
+                }}
                 className="w-full flex flex-col gap-5 p-8"
               >
-                {/* Formsubmit config */}
-                <input type="hidden" name="_subject" value="new message from stalfolio" />
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_next" value="https://stalfolio.vercel.app/contact" />
-                <input type="hidden" name="_template" value="table" />
-                <input type="text" name="_honey" style={{ display: "none" }} />
-
                 <div>
                   <h2 className="text-xl font-black text-gray-900 lowercase tracking-tight mb-1">
                     send a message
@@ -138,12 +152,17 @@ export default function ContactPage() {
                   />
                 </div>
 
+                {error && (
+                  <p className="text-xs text-red-500 lowercase">{error}</p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gray-900 hover:bg-gray-700 text-white font-semibold text-sm py-3.5 transition-colors lowercase"
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gray-900 hover:bg-gray-700 disabled:opacity-50 text-white font-semibold text-sm py-3.5 transition-colors lowercase"
                 >
                   <Send size={16} />
-                  send message
+                  {loading ? "sending..." : "send message"}
                 </button>
               </form>
             </div>
