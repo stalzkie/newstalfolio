@@ -41,6 +41,7 @@ export default function HomePage() {
   // Dropdown + Spotify state
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [playing,      setPlaying]      = useState(false);
+  const [aboutExpanded, setAboutExpanded] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown on outside click
@@ -216,11 +217,14 @@ export default function HomePage() {
             <h3 className="text-sm font-semibold text-gray-900 lowercase mb-2">
               about me
             </h3>
-            <p className="text-sm text-gray-600 leading-relaxed lowercase line-clamp-6">
+            <p className={`text-sm text-gray-600 leading-relaxed lowercase ${aboutExpanded ? "" : "line-clamp-6"}`}>
               {data.about}
             </p>
-            <button className="text-xs font-semibold text-gray-800 lowercase mt-2 hover:underline">
-              read more
+            <button
+              onClick={() => setAboutExpanded((v) => !v)}
+              className="text-xs font-semibold text-gray-800 lowercase mt-2 hover:underline"
+            >
+              {aboutExpanded ? "show less" : "read more"}
             </button>
           </div>
 
