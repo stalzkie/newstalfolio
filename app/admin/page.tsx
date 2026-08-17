@@ -27,6 +27,7 @@ import {
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import { ImageUploader } from "@/components/image-uploader";
+import { MarkdownContentField } from "@/components/markdown-content-field";
 import { TaskManagement } from "@/components/task-management";
 import { MoneyManagement } from "@/components/money-management";
 import { LinkIcon, getPlatform } from "@/components/link-icon";
@@ -749,7 +750,7 @@ export default function AdminPage() {
                     <Field label="short description" value={editProjectDraft.description} onChange={(v) => setEditProjectDraft((p) => ({ ...p, description: v }))} placeholder="One or two sentences..." textarea rows={2} />
                     <ImageUploader label="thumbnail" value={editProjectDraft.imageUrl || ""} onChange={(v) => setEditProjectDraft((p) => ({ ...p, imageUrl: v }))} folder="projects" aspectRatio="16/9" enableCrop cropAspect={16 / 9} />
                     <ImageUploader label="cover image" value={editProjectDraft.coverImageUrl || ""} onChange={(v) => setEditProjectDraft((p) => ({ ...p, coverImageUrl: v }))} folder="covers" aspectRatio="2.4/1" enableCrop cropAspect={2.4} />
-                    <Field label="article content (markdown)" value={editProjectDraft.content || ""} onChange={(v) => setEditProjectDraft((p) => ({ ...p, content: v }))} placeholder="## intro..." textarea rows={10} />
+                    <MarkdownContentField label="article content (markdown)" value={editProjectDraft.content || ""} onChange={(v) => setEditProjectDraft((p) => ({ ...p, content: v }))} placeholder="## intro..." rows={10} />
                     <div className="flex flex-col gap-1">
                       <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">tags</label>
                       <div className="flex gap-2">
@@ -833,12 +834,11 @@ export default function AdminPage() {
                   enableCrop
                   cropAspect={2.4}
                 />
-                <Field
+                <MarkdownContentField
                   label="article content (markdown)"
                   value={newProject.content || ""}
                   onChange={(v) => setNewProject((p) => ({ ...p, content: v }))}
                   placeholder={`## intro\n\nWrite your article here in markdown...\n\n## what we did\n\n- point one\n- point two`}
-                  textarea
                   rows={10}
                 />
 
