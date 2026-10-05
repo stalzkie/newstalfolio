@@ -744,11 +744,11 @@ const RESTAURANT: DemoSpec = {
   ],
 };
 
-/* ─── Hoverscan ────────────────────────────────────────────────────── */
+/* ─── QR Ordering Platform ───────────────────────────────────────── */
 
 const HOVERSCAN: DemoSpec = {
-  slug: "hoverscan",
-  name: "Hoverscan",
+  slug: "qr-ordering",
+  name: "QR Ordering Platform",
   blurb:
     "Multi-tenant QR ordering for restaurants and venues: guest menu, live order board, category-routed printing and a platform admin. Sample records throughout.",
   screens: [
@@ -835,11 +835,11 @@ const HOVERSCAN: DemoSpec = {
   ],
 };
 
-/* ─── ChatZilla CRM ────────────────────────────────────────────────── */
+/* ─── AI Receptionist CRM ────────────────────────────────────────── */
 
 const CHATZILLA: DemoSpec = {
-  slug: "chatzilla-crm",
-  name: "ChatZilla CRM",
+  slug: "ai-receptionist-crm",
+  name: "AI Receptionist CRM",
   blurb:
     "Lead capture through an AI receptionist, client onboarding, NPS, referrals and the SaaS numbers behind them. Sample records throughout.",
   screens: [

@@ -397,10 +397,10 @@ export const SEED_CONTENT: SiteContent = {
       "role": "Designed and built the suite end to end, from POS and kitchen flow to the loyalty program and website."
     },
     {
-      "slug": "hoverscan",
+      "slug": "qr-ordering",
       "cat": "systems",
-      "name": "Hoverscan",
-      "file": "hoverscan",
+      "name": "QR Ordering Platform",
+      "file": "qr-ordering",
       "art": "scan",
       "industry": "Restaurants & venues · SaaS",
       "status": [
@@ -440,10 +440,10 @@ export const SEED_CONTENT: SiteContent = {
       "priv": true
     },
     {
-      "slug": "chatzilla-crm",
+      "slug": "ai-receptionist-crm",
       "cat": "systems",
-      "name": "ChatZilla CRM",
-      "file": "chatzilla-crm",
+      "name": "AI Receptionist CRM",
+      "file": "ai-receptionist-crm",
       "art": "chat",
       "industry": "AI receptionist agency",
       "status": [
