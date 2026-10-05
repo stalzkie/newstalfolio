@@ -379,6 +379,35 @@ export function mountDesktop(
     }
   }) as EventListener);
 
+  /* ─── Showreel ─────────────────────────────────────────────────── */
+
+  const showreelModal = $("showreelModal");
+  const showreelVideo = $("showreelVideo") as HTMLVideoElement | null;
+
+  function openShowreel() {
+    if (!showreelModal) return;
+    showreelModal.hidden = false;
+    showreelVideo?.play().catch(() => {});
+  }
+  function closeShowreel() {
+    if (!showreelModal) return;
+    showreelModal.hidden = true;
+    showreelVideo?.pause();
+    if (showreelVideo) showreelVideo.currentTime = 0;
+  }
+
+  /* The folder is re-rendered on every home-route mount, so this
+     listens on document rather than binding it directly. */
+  on(document, "click", (e) => {
+    const t = e.target as HTMLElement | null;
+    if (t?.closest("#showreelOpen")) openShowreel();
+    else if (t?.closest("#showreelClose")) closeShowreel();
+    else if (t === showreelModal) closeShowreel();
+  });
+  on(document, "keydown", ((e: KeyboardEvent) => {
+    if (e.key === "Escape" && showreelModal && !showreelModal.hidden) closeShowreel();
+  }) as EventListener);
+
   /* ─── G5. Theme ────────────────────────────────────────────────── */
 
   /* The site ships light; the toggle flips straight between light and

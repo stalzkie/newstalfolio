@@ -178,6 +178,21 @@ ul.clean li::marker{color:var(--muted)}
 .logowall img:hover{opacity:1}
 @media (max-width:640px){ .logowall{gap:20px 28px; padding:22px 20px} .logowall img{height:32px} }
 
+/* showreel: a folder that opens the video, with a meme sticker pointing
+   at it and a drag-hint-style arrow on the other side. */
+.showreel-row{display:flex; align-items:center; justify-content:center; gap:34px; margin:40px 0; flex-wrap:wrap}
+.showreel-hint{font-family:var(--mono); font-size:10.5px; color:var(--muted); white-space:nowrap}
+.showreel-wrap{position:relative; display:inline-flex}
+.showreel-open{background:none; border:0; padding:0; font:inherit}
+.showreel-sticker{position:absolute; right:-46px; top:-22px; width:84px; height:auto; border-radius:10px; border:3px solid #fff; box-shadow:var(--shadow); transform:rotate(11deg); pointer-events:none; user-select:none}
+@media (max-width:640px){ .showreel-row{gap:18px} .showreel-sticker{right:-30px; top:-26px; width:64px} }
+
+.video-modal{position:fixed; inset:0; z-index:100; display:flex; justify-content:center; align-items:center; padding:16px; background:rgba(10,12,20,.6); backdrop-filter:blur(4px)}
+.video-modal-box{position:relative; width:100%; max-width:720px; background:#000; border-radius:16px; overflow:hidden; box-shadow:0 40px 80px -30px rgba(0,0,0,.6); animation:spot-in var(--dur-2) var(--ease-spring)}
+.video-modal-box video{display:block; width:100%; max-height:80vh; background:#000}
+.video-modal-close{position:absolute; top:10px; right:10px; z-index:1; width:30px; height:30px; border-radius:50%; border:0; background:rgba(0,0,0,.55); color:#fff; font-size:14px; line-height:1; cursor:pointer; display:grid; place-items:center}
+.video-modal-close:hover{background:rgba(0,0,0,.75)}
+
 .feature{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:40px; align-items:center; margin-bottom:56px}
 .feature.flip{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
 .feature.flip .side{order:2}

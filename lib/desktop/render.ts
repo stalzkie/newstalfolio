@@ -284,6 +284,16 @@ export function home(c: SiteContent): string {
       ).join("") +
       "</div></div>" +
 
+    '<div class="showreel-row">' +
+      '<span class="showreel-hint">watch the showreel →</span>' +
+      '<span class="showreel-wrap">' +
+        '<button type="button" class="folder showreel-open" id="showreelOpen" aria-haspopup="dialog" aria-controls="showreelModal">' +
+          '<span class="folder-ico"></span><span>showreel</span>' +
+        "</button>" +
+        '<img class="showreel-sticker" src="/pointing-sticker.webp" alt="" aria-hidden="true">' +
+      "</span>" +
+    "</div>" +
+
     "<section>" + secHead("currently", esc(cfg.currentlyHeading), esc(cfg.currentlyDesc)) +
       '<div class="grid-2">' +
         cfg.currently.map((n) =>

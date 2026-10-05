@@ -150,6 +150,15 @@ export default async function HomePage() {
         </div>
       </div>
 
+      <div className="video-modal" id="showreelModal" hidden role="dialog" aria-modal="true" aria-label="Showreel">
+        <div className="video-modal-box">
+          <button type="button" className="video-modal-close" id="showreelClose" aria-label="Close">✕</button>
+          <video id="showreelVideo" controls playsInline preload="none">
+            <source src="/stal-showreel-15s.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+
       <div id="toastHost" />
 
       <DesktopRoot content={content} initialRoute="home" />
