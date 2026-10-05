@@ -278,7 +278,7 @@ export function home(c: SiteContent): string {
       : "") +
 
     '<div class="win" style="margin-top:12px">' + bar("worked-with.logos") +
-      '<div class="logowall"><span class="logowall-label">worked with</span>' +
+      '<div class="logowall">' +
       WORKED_WITH.map((w) =>
         '<img src="' + esc(w.file) + '" alt="' + esc(w.name) + '" loading="lazy">'
       ).join("") +

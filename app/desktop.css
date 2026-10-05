@@ -173,11 +173,10 @@ ul.clean li::marker{color:var(--muted)}
 
 /* "worked with" logo wall: a fixed dark strip so the white client
    wordmarks stay legible in both light and dark site themes. */
-.logowall{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:30px 44px; padding:22px 24px; background:#15161a}
-.logowall-label{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:#8a8d96; margin-right:4px}
-.logowall img{height:20px; width:auto; opacity:.8; filter:saturate(.85); transition:opacity var(--dur-2) var(--ease-out)}
+.logowall{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:30px 44px; padding:28px 24px; background:#15161a}
+.logowall img{height:40px; width:auto; opacity:.8; filter:saturate(.85); transition:opacity var(--dur-2) var(--ease-out)}
 .logowall img:hover{opacity:1}
-@media (max-width:640px){ .logowall{gap:20px 28px; padding:18px 20px} .logowall img{height:16px} }
+@media (max-width:640px){ .logowall{gap:20px 28px; padding:22px 20px} .logowall img{height:32px} }
 
 .feature{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:40px; align-items:center; margin-bottom:56px}
 .feature.flip{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
