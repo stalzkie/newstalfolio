@@ -172,7 +172,10 @@ export function mountDesktop(
   }
 
   function wire(nav: string) {
-    if (nav === "work") wireForm();
+    if (nav === "work") {
+      wireForm();
+      wireContactTabs();
+    }
     if (nav === "about") {
       wireTerminal();
       wirePad();
@@ -198,14 +201,24 @@ export function mountDesktop(
 
   on(window, "hashchange", route);
 
-  /* Pricing "get a quote" buttons preselect the matching service. */
+  /* Pricing "get a quote" buttons switch the contact form to quote mode
+     and tick the platform checkbox that matches the tier. */
+  const SERVICE_PLATFORM: Record<string, string> = {
+    "Website design & development": "Website",
+    "Full-stack development": "Backend / API",
+    "AI tools & AI-native systems": "AI / automation",
+  };
   on(document, "click", (e) => {
     const b = (e.target as HTMLElement | null)?.closest("[data-service]") as HTMLElement | null;
     if (!b) return;
     const v = b.dataset.service || "";
     setTimeout(() => {
-      const s = $("f-service") as HTMLSelectElement | null;
-      if (s) s.value = v;
+      setContactMode("quote");
+      const platform = SERVICE_PLATFORM[v];
+      if (platform) {
+        const cb = document.querySelector<HTMLInputElement>('[data-platform="' + platform + '"]');
+        if (cb) cb.checked = true;
+      }
     }, 0);
   });
 
@@ -1325,6 +1338,42 @@ export function mountDesktop(
 
   /* ─── Contact form ─────────────────────────────────────────────── */
 
+  /* "message" is the standard contact form; "quote" is the full
+     software-development quote request, so the pricing tiers can land
+     here pre-filled. */
+  function setContactMode(mode: "message" | "quote") {
+    const seg = $("contactSeg");
+    if (!seg) return;
+    seg.querySelectorAll<HTMLButtonElement>("button[data-mode]").forEach((b) => {
+      b.setAttribute("aria-pressed", String(b.dataset.mode === mode));
+    });
+    document.querySelectorAll<HTMLElement>("[data-mode-field]").forEach((el) => {
+      el.hidden = el.dataset.modeField !== mode;
+    });
+    const label = $("f-msg-label");
+    const msg = $("f-msg") as HTMLTextAreaElement | null;
+    const submit = $("contactSubmit");
+    if (mode === "quote") {
+      if (label) label.textContent = "What do you want built? (a few sentences)";
+      if (msg) msg.placeholder = "What are you building, who is it for, and when do you need it?";
+      if (submit) submit.textContent = "send quote request";
+    } else {
+      if (label) label.textContent = "Message";
+      if (msg) msg.placeholder = "What's on your mind?";
+      if (submit) submit.textContent = "send message";
+    }
+  }
+
+  function wireContactTabs() {
+    const seg = $("contactSeg");
+    if (!seg) return;
+    seg.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement | null)?.closest("button[data-mode]") as HTMLButtonElement | null;
+      if (!b) return;
+      setContactMode(b.dataset.mode === "quote" ? "quote" : "message");
+    });
+  }
+
   function wireForm() {
     const f = $("contactForm") as HTMLFormElement | null;
     if (!f) return;
@@ -1354,18 +1403,41 @@ export function mountDesktop(
       set("e-msg", msg.length >= 10 ? "" : "Add a sentence or two about the project.");
       if (!ok) return;
 
+      const mode = $("contactSeg")?.querySelector('button[aria-pressed="true"]')?.getAttribute("data-mode") === "quote"
+        ? "quote" : "message";
+
+      const checked = (sel: string) =>
+        Array.from(document.querySelectorAll<HTMLInputElement>(sel))
+          .filter((i) => i.checked)
+          .map((i) => i.dataset.platform || i.dataset.feature || "");
+
       const data = {
-        name, email,
+        mode, name, email,
+        subject: val("f-subject").trim(),
         company: val("f-company").trim(),
-        service: val("f-service"),
+        phone: val("f-phone").trim(),
+        project: val("f-project").trim(),
+        platforms: checked("[data-platform]"),
+        features: checked("[data-feature]"),
+        other: val("f-other").trim(),
+        deadline: val("f-deadline"),
         budget: val("f-budget"),
         message: msg,
       };
-      const text =
-        "Name: " + data.name + "\nEmail: " + data.email +
-        (data.company ? "\nCompany: " + data.company : "") +
-        "\nService: " + data.service + "\nBudget: " + data.budget + "\n\n" + data.message;
-      const subject = "Project inquiry: " + data.service;
+      const text = mode === "quote"
+        ? "Name: " + data.name + "\nEmail: " + data.email +
+          (data.company ? "\nCompany: " + data.company : "") +
+          (data.phone ? "\nPhone / WhatsApp: " + data.phone : "") +
+          (data.project ? "\nProject: " + data.project : "") +
+          (data.platforms.length ? "\nPlatform: " + data.platforms.join(", ") : "") +
+          (data.features.length ? "\nFeatures: " + data.features.join(", ") : "") +
+          "\nWhen: " + data.deadline + "\nBudget: " + data.budget +
+          "\n\n" + data.message +
+          (data.other ? "\n\nOther: " + data.other : "")
+        : "Name: " + data.name + "\nEmail: " + data.email + "\n\n" + data.message;
+      const subject = mode === "quote"
+        ? "Quote request" + (data.project ? ": " + data.project : "")
+        : (data.subject ? data.subject : "Message from the site");
       const sent = $("sent");
       if (!sent) return;
 

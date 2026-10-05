@@ -200,6 +200,13 @@ export function finder(c: SiteContent): string {
 
 /* ─── Pages ──────────────────────────────────────────────────────── */
 
+const WORKED_WITH = [
+  { name: "Hoversight", file: "/company-logos/hoversight.png" },
+  { name: "Acqron", file: "/company-logos/acqron.png" },
+  { name: "Modern Institute of Business", file: "/company-logos/mib.png" },
+  { name: "blvd", file: "/company-logos/blvd.png" },
+];
+
 export function home(c: SiteContent): string {
   const cfg = c.config;
   const feat = cfg.featured
@@ -269,6 +276,13 @@ export function home(c: SiteContent): string {
         cfg.stats.map((s) => '<div class="stat"><b>' + esc(s.value) + "</b><span>" + esc(s.label) + "</span></div>").join("") +
         "</div></div>"
       : "") +
+
+    '<div class="win" style="margin-top:12px">' + bar("worked-with.logos") +
+      '<div class="logowall"><span class="logowall-label">worked with</span>' +
+      WORKED_WITH.map((w) =>
+        '<img src="' + esc(w.file) + '" alt="' + esc(w.name) + '" loading="lazy">'
+      ).join("") +
+      "</div></div>" +
 
     "<section>" + secHead("currently", esc(cfg.currentlyHeading), esc(cfg.currentlyDesc)) +
       '<div class="grid-2">' +
@@ -531,6 +545,14 @@ export function writing(c: SiteContent): string {
   );
 }
 
+const PLATFORMS = ["Website", "Web app", "iOS app", "Android app", "Backend / API", "AI / automation"];
+const FEATURES = [
+  "User login / accounts", "Payments / billing", "Admin dashboard",
+  "Notifications", "File uploads", "Search",
+  "Reports / exports", "Chat / messaging", "Third-party integrations",
+  "AI / LLM features", "Multi-language", "Not sure yet",
+];
+
 export function work(c: SiteContent): string {
   const cfg = c.config;
   return (
@@ -554,17 +576,31 @@ export function work(c: SiteContent): string {
     "</section>" +
     '<section id="contact">' + secHead("contact", "tell me what you're building", "A few details are enough to start.") +
       '<div class="win" style="max-width:760px; margin:0 auto">' + bar("new-message.eml") + '<div class="win-body">' +
+        '<div class="seg" id="contactSeg" role="tablist" aria-label="Contact mode" style="margin-bottom:18px">' +
+          '<button type="button" data-mode="message" aria-pressed="true">send me a message</button>' +
+          '<button type="button" data-mode="quote" aria-pressed="false">get a quote</button>' +
+        "</div>" +
         '<form class="form" id="contactForm" novalidate>' +
-          '<div class="field"><label for="f-name">Name</label><input id="f-name" autocomplete="name" required><span class="err" id="e-name"></span></div>' +
+          '<div class="field"><label for="f-name">Full name</label><input id="f-name" autocomplete="name" required><span class="err" id="e-name"></span></div>' +
           '<div class="field"><label for="f-email">Email</label><input id="f-email" type="email" autocomplete="email" required><span class="err" id="e-email"></span></div>' +
-          '<div class="field"><label for="f-company">Company <span class="muted">(optional)</span></label><input id="f-company" autocomplete="organization"></div>' +
-          '<div class="field"><label for="f-service">What do you need?</label><select id="f-service">' +
-          cfg.tiers.map((t) => "<option>" + esc(t.name) + "</option>").join("") +
-          "<option>Something else</option></select></div>" +
-          '<div class="field full"><label for="f-budget">Budget</label><select id="f-budget"><option>$500–$2,000</option><option>$2,000–$5,000</option><option>$5,000–$10,000</option><option>$10,000+</option><option>Not sure yet</option></select></div>' +
-          '<div class="field full"><label for="f-msg">Project details</label><textarea id="f-msg" placeholder="What are you building, who is it for, and when do you need it?" required></textarea><span class="err" id="e-msg"></span></div>' +
+          '<div class="field full" data-mode-field="message"><label for="f-subject">Subject</label><input id="f-subject" placeholder="What\'s on your mind?"></div>' +
+          '<div class="field" data-mode-field="quote" hidden><label for="f-company">Company <span class="muted">(if any)</span></label><input id="f-company" autocomplete="organization"></div>' +
+          '<div class="field" data-mode-field="quote" hidden><label for="f-phone">Phone / WhatsApp</label><input id="f-phone" autocomplete="tel"></div>' +
+          '<div class="field full" data-mode-field="quote" hidden><label for="f-project">Project name</label><input id="f-project"></div>' +
+          '<div class="field full"><label for="f-msg" id="f-msg-label">Message</label><textarea id="f-msg" placeholder="What\'s on your mind?" required></textarea><span class="err" id="e-msg"></span></div>' +
+          '<div class="field full" data-mode-field="quote" hidden><label>Platform</label><div class="check-grid">' +
+          PLATFORMS.map((p) =>
+            '<label class="check"><input type="checkbox" data-platform="' + esc(p) + '">' + esc(p) + "</label>"
+          ).join("") + "</div></div>" +
+          '<div class="field full" data-mode-field="quote" hidden><label>Features <span class="muted">(tick everything you need)</span></label><div class="check-grid">' +
+          FEATURES.map((f) =>
+            '<label class="check"><input type="checkbox" data-feature="' + esc(f) + '">' + esc(f) + "</label>"
+          ).join("") + "</div></div>" +
+          '<div class="field full" data-mode-field="quote" hidden><label for="f-other">Other features, or anything above you want explained</label><textarea id="f-other"></textarea></div>' +
+          '<div class="field" data-mode-field="quote" hidden><label for="f-deadline">When do you need it?</label><select id="f-deadline"><option>ASAP</option><option>Within 1 month</option><option>1–3 months</option><option>3–6 months</option><option>No rush / not sure</option></select></div>' +
+          '<div class="field" data-mode-field="quote" hidden><label for="f-budget">Budget range</label><select id="f-budget"><option>$500–$2,000</option><option>$2,000–$5,000</option><option>$5,000–$10,000</option><option>$10,000+</option><option>Not sure yet</option></select></div>' +
           '<div class="form-foot"><small>Or email me directly at <span class="mono" style="user-select:all">' +
-          esc(cfg.email) + '</span></small><button class="btn btn-primary" type="submit">send message</button></div>' +
+          esc(cfg.email) + '</span></small><button class="btn btn-primary" type="submit" id="contactSubmit">send message</button></div>' +
         "</form>" +
         '<div id="sent" hidden></div>' +
       "</div></div>" +
