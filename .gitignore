@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .claude/
+
+# spec handout — contains NDA client repo names, must not be committed
+handover.md

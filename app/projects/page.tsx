@@ -1,5 +1,6 @@
 "use client";
 
+import "../globals.css";
 import { FeaturePageLayout, type FeaturePageData } from "@/components/feature-page-layout";
 import { PMTeamAnim, PMMilestoneAnim, PMStakeholderAnim } from "@/components/page-animations";
 import {

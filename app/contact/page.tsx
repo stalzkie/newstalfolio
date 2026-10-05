@@ -1,5 +1,6 @@
 "use client";
 
+import "../globals.css";
 import { NavDock } from "@/components/nav-dock";
 import { Send } from "lucide-react";
 import { useState } from "react";

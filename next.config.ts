@@ -27,12 +27,25 @@ const securityHeaders = [
       "frame-src https://open.spotify.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
-      "form-action 'self' https://formsubmit.co",
+      "form-action 'self'",
     ].join("; "),
   },
 ];
 
+/* The old persona's marketing pages. The files are kept for reference but
+   the routes are redirected so nothing stale is publicly reachable. */
+const legacyRedirects = [
+  { source: "/projects", destination: "/", permanent: true },
+  { source: "/content",  destination: "/#writing", permanent: true },
+  { source: "/bi",       destination: "/", permanent: true },
+  { source: "/contact",  destination: "/#contact", permanent: true },
+];
+
 const nextConfig: NextConfig = {
+  async redirects() {
+    return legacyRedirects;
+  },
+
   async headers() {
     return [
       {

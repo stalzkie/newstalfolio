@@ -1,5 +1,7 @@
 "use client";
 
+import "../globals.css";
+
 export const dynamic = "force-dynamic";
 
 import {
@@ -31,9 +33,10 @@ import { MarkdownContentField } from "@/components/markdown-content-field";
 import { TaskManagement } from "@/components/task-management";
 import { MoneyManagement } from "@/components/money-management";
 import { LinkIcon, getPlatform } from "@/components/link-icon";
+import { SiteContentAdmin } from "@/components/site-content-admin";
 
 type Tab = "profile" | "experience" | "work" | "projects" | "links";
-type Section = "admin" | "tasks" | "money";
+type Section = "admin" | "site" | "tasks" | "money";
 
 /* ─── Helpers ────────────────────────────────────────────────────── */
 function slugify(s: string) {
@@ -506,19 +509,25 @@ export default function AdminPage() {
           </div>
           {/* Section switcher — scrollable on mobile */}
           <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1 mb-2 w-full overflow-x-auto">
-            {(["admin", "tasks", "money"] as Section[]).map((s) => (
+            {(["admin", "site", "tasks", "money"] as Section[]).map((s) => (
               <button
                 key={s}
                 onClick={() => setSection(s)}
                 className={`flex-1 min-w-0 px-3 py-1.5 rounded-lg text-xs font-semibold lowercase transition-colors whitespace-nowrap ${section === s ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-800"}`}
               >
-                <span className="sm:hidden">{s === "tasks" ? "tasks" : s === "money" ? "money" : "admin"}</span>
-                <span className="hidden sm:inline">{s === "tasks" ? "task management" : s === "money" ? "money" : "admin"}</span>
+                <span className="sm:hidden">{s === "tasks" ? "tasks" : s === "money" ? "money" : s === "site" ? "site" : "admin"}</span>
+                <span className="hidden sm:inline">{s === "tasks" ? "task management" : s === "money" ? "money" : s === "site" ? "site content" : "admin"}</span>
               </button>
             ))}
           </div>
         </div>
       </div>
+
+      {section === "site" && (
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-6">
+          <SiteContentAdmin />
+        </div>
+      )}
 
       {section === "tasks" && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">

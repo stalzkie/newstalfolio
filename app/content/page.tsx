@@ -1,5 +1,6 @@
 "use client";
 
+import "../globals.css";
 import { FeaturePageLayout, type FeaturePageData } from "@/components/feature-page-layout";
 import { ContentScriptAnim, ContentArticleAnim, ContentBundleAnim } from "@/components/page-animations";
 import {

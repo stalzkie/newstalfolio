@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="stalfolio">
+  <rect width="64" height="64" rx="14" fill="#eeeff2"/>
+  <path d="M10 20a4 4 0 0 1 4-4h11l4 5h21a4 4 0 0 1 4 4v3H10z" fill="#58b2ee"/>
+  <rect x="10" y="24" width="44" height="26" rx="4" fill="#94d3f8"/>
+</svg>
